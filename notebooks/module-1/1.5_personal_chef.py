@@ -8,7 +8,7 @@ from tavily import TavilyClient
 
 tavily_client = TavilyClient()
 
-@tool
+
 def web_search(query: str) -> Dict[str, Any]:
 
     """Search the web for information"""
@@ -28,7 +28,7 @@ Return recipe suggestions and eventually the recipe instructions to the user, if
 from langchain.agents import create_agent
 
 agent = create_agent(
-    model="gpt-5-nano",
+    model="claude-haiku-4-5-20251001", #gpt-5-nano,
     tools=[web_search],
     system_prompt=system_prompt
 )
