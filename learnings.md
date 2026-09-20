@@ -22,4 +22,28 @@ Here is how API keys are typically handled in production instead:
 
 If this script were deployed to production, it should ideally validate that the required keys (like the Anthropic and Tavily keys) exist in the system environment variables before initializing the `TavilyClient` or the agent.
 
+
+##Production deployments
+
+You **do not** use `langgraph dev` in production.
+
+The `langgraph dev` command spins up a lightweight, in-memory development server. It is designed purely for rapid local testing and hot reloading. Because it stores graph state (like conversation threads) entirely in memory, any process restart will wipe the data. It also lacks the security, concurrency limits, and background queue workers needed for a live environment.
+
+Instead, LangGraph requires a robust architecture for production (like API serving, persistent Postgres checkpointers for state, and containerization). Here is how you actually deploy it to production using the LangGraph CLI:
+
+**1. Self-Hosted / Containerized (Docker)**
+If you are deploying to your own infrastructure (like AWS ECS, Kubernetes, or Google Cloud Run), you build a Docker image.
+
+* **`langgraph build`**: This command reads your `langgraph.json` configuration and builds a production-ready Docker image of your LangGraph API server. You can then push this image to a container registry and deploy it.
+* **`langgraph dockerfile`**: If you need to customize the deployment further, this command generates a raw Dockerfile from your configuration.
+* **`langgraph up`**: If you are deploying to a simple Virtual Machine, this command launches the API server in Docker (often using Docker Compose to spin up a persistent PostgreSQL database alongside the app).
+
+**2. Managed Cloud (LangSmith Deployments)**
+If you want a fully managed solution, LangChain offers LangSmith Deployments (LangGraph Cloud).
+
+* **`langgraph deploy`**: This single command automates the Docker build, infrastructure setup, and deployment directly to LangSmith Cloud. It handles background queues, thread persistence, streaming, and API endpoints automatically.
+
+For the script in your browser (`1.5_personal_chef_fixed.py`), if you wanted to prepare it for a real production deployment using `langgraph build` or `deploy`, you would need to replace the commented-out `MemorySaver()` with a true persistent backend like a `PostgresSaver`.
+
+
 ### End Module 1

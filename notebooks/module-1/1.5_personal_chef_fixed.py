@@ -6,6 +6,8 @@ from langchain.tools import tool
 from langchain.agents import create_agent
 from langgraph.checkpoint.memory import MemorySaver 
 
+### got to command line and run with langgraph dev
+
 load_dotenv()
 
 tavily_client = TavilyClient()
